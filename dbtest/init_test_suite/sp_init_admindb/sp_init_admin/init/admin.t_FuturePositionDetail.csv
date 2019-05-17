@@ -1,0 +1,1 @@
+OrgID,TradingDay,BrokerID,AccountID,CurrencyID,InstrumentID,ExchangeID,PosiDirection,HedgeFlag,OpenDate,TradeID,Volume,CombVolume,OpenPrice,Margin,CloseProfitByDate,PositionProfitByDate,CloseProfitByTrade,PositionProfitByTrade,MarketValue,PremiumIn,PremiumOut,CloseVolume,CloseAmount,AccountType,PreSettlementPrice 

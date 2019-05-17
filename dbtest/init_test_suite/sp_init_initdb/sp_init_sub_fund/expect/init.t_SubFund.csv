@@ -1,0 +1,3 @@
+FundID,SubFundNo,SubFundID,IsPriority,ExpectAnnualYield,ExpectUnitNetValue,ShareRatio,OrgID 
+S004,1,S00401,1,0.1,1,0.4,frank
+S004,2,S00402,0,0,0,0.6,frank

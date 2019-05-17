@@ -1,0 +1,5 @@
+BrokerID,PrimaryAccountID,OrgID,AccountClass,TradingDay,LastTradingDay,MaxOrderLocalID,MaxRebuildOrderLocalID,DefaultCurrencyID,QryMarginRateFinishStatus,QryCommissionRateFinishStatus,PrimaryInitStatus,BrokerPassword,InvestorConnectStatus,MaxBrokerOrderID,BrokerSessionID,OfferID,OfferRunID,IsAllowLogin,LoginFailedCount,MaxLoginFailedCount,ErrorMsg,LoginType 
+1,71020537,frank,0,20190513,20190510,0,0,CNY,0,0,0,045BA4C11199DA3DA76554E5AE160CE7,0,0,,1,0,1,0,5,,0
+2,10000038071,frank,2,20190513,20190510,0,0,CNY,0,0,0,A299257D368DD67003106C98C48EB69E,0,0,,2,0,1,0,5,,0
+3,80223332,frank,1,20190513,20190510,0,0,CNY,0,0,0,0EF8C8784F0BD1B0CFBFFF9B2497F0FB,0,0,,4,0,1,0,5,,0
+4,132922,frank,0,20190513,20190510,0,0,CNY,0,0,1,13F9D47AECC85DFE97FF293DF95EA2CD,0,0,,5,0,1,0,5,,0

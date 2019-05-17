@@ -1,0 +1,54 @@
+<!DOCTYPE html>																
+<html>                                                      				
+                                                            				
+<head>                                                      				
+	<meta charset="utf-8">                                  				
+	<title>测试结果</title>                                 				
+	<style>                                                 				
+		span{display:block;}                                				
+		table {text-align: center;}                         				
+		thead{ font-weight: bold;}                          				
+		table, th, td {border: 1px solid gray;}             				
+		th, td{padding: 7px 12px;white-space:pre-wrap;}                          				
+		.pass { color: green;}                              				
+		.error { color: red;}                               				
+		.result_col { text-align: left;}                               		
+	</style>                                                				
+</head>                                                     				
+<body style="padding: 30px 80px;"> 										
+	<span>开始时间:2019-05-17 17:41:41</span>
+	<span>结束时间:2019-05-17 17:41:44</span>
+	<span>执行时间:2 秒</span>
+	<span>总共执行测试套件数量：2，通过数量：2，失败数量：0</span>
+	<span>总共执行测试用例数量：3，通过数量：3，失败数量：0</span>
+	<table style="margin-top: 30px;">	                           				
+		<thead>																	
+			<tr>                                                                
+				<th>测试套件</th>                                               
+				<th>测试用例</th>                                               
+				<th>结果</th>                                                   
+				<th style="width:90px;">耗时</th>                                                   
+			</tr>                                                               
+		</thead>                                                                
+		<tbody>                                                                 
+			<tr>
+				<td rowspan="1">sp_init_admindb(1,0)</td>
+				<td>sp_init_admin</td>
+				<td class="result_col pass">pass</td>
+				<td >1秒</td>
+			</tr>
+			<tr>
+				<td rowspan="2">sp_init_initdb(2,0)</td>
+				<td>sp_init_primary_account</td>
+				<td class="result_col pass">pass</td>
+				<td >0秒</td>
+			</tr>
+			<tr>
+				<td>sp_init_sub_fund</td>
+				<td class="result_col pass">pass</td>
+				<td >0秒</td>
+			</tr>
+		</tbody>                                                                
+	</table>                                                                	
+	</body>                                                                		
+	</html>                                                                		

@@ -1,0 +1,1 @@
+ExchangeID,InstrumentID,OrgID,BrokerID,PrimaryAccountID,HedgeFlag,TradingDay,OpenRatioByMoney,OpenRatioByVolume,CloseRatioByMoney,CloseRatioByVolume,CloseTodayRatioByMoney,CloseTodayRatioByVolume,LastTradingDay 

@@ -82,19 +82,22 @@ def parse_one_csv_file(file_path, table_name, tables, primary_key_name_list):
         row += 1
 
 
-def parse_csvs(cursor, path, admin_tables, history_tables, init_tables, admindb_name, historydb_name, initdb_name):
+def parse_csvs(cursor, path, db_info):
     for file_name in os.listdir(path):
         if not file_name.endswith(".csv"):
             continue
         if file_name.startswith("admin"):
-            curr_tables = admin_tables
-            db_name = admindb_name
+            db_name = db_info.admin_db
+            curr_tables = db_info.admin_tables
         elif file_name.startswith("history"):
-            curr_tables = history_tables
-            db_name = historydb_name
+            db_name = db_info.history_db
+            curr_tables = db_info.history_tables
         elif file_name.startswith("init"):
-            curr_tables = init_tables
-            db_name = initdb_name
+            db_name = db_info.init_db
+            curr_tables = db_info.init_tables
+        elif file_name.startswith("sync"):
+            db_name = db_info.sync_db
+            curr_tables = db_info.sync_tables
         else:
             print "unsupported file name[%s]." % file_name
             continue

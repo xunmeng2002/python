@@ -1,0 +1,1 @@
+call admin.sp_init_admin('<history>');

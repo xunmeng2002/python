@@ -1,0 +1,67 @@
+1. 参数：
+--filter=xxxxxx, 支持正则表达式过滤测试用例，例如：python run_utest.py filter=close_position
+--suite-filter=xxxxx,支持正则表达式过滤测试套件，例如：python run_utest.py suite-filter=future
+--only-load-data, 只加载初始化数据
+--help 查看帮助
+
+
+2. 目录结构：
+--report		
+--test_suite
+	|----suite1
+		|----desc.txt
+	    |----case1
+			|----init
+			|----expect
+			|----command.txt
+			|----desc.txt
+	|----suite2
+		|----desc.txt
+		|----case1
+			|----init
+			|----expect
+			|----command.txt
+			|----desc.txt
+		|----case2
+			|----init
+			|----expect
+			|----command.txt
+			|----desc.txt
+--utest.ini
+	
+report保存执行报告
+
+3. 配置文件说明
+[db]
+user=liu.x1
+password=Liu.x1@1234
+host=192.168.6.125
+port=3306
+admindb=lx1_admin
+syncdb=lx1_sync
+historydb=lx1_history
+#当前数据库
+db=lx1_history
+
+
+4. 规范
+1) init
+init和expect中的csv格式为GBK
+init数据中的csv文件，某个字段不填则为null
+
+2)expect
+expect中的浮点数据，必须跟数据库一直，数据库是decimal(24,6)，则csv文件中也需要填写6未小数点
+
+3)command
+command中如果不是操作当前数据库的对象，需要指定数据库，指定数据库使用admin、history、sync，不需要使用真实的数据库名。
+例如：call admin.sp_xxx_xxx(); 不需要写成call lx1_admin.sp_xxx_xxx()。后者也是正确的，但是移植性不好，不建议。
+但是不支持use admin;call sp_xxx_xxx().
+command中使用EXPECT(value1,value2)检查返回值是否相等,必须使用EXPECT关键字。
+command中使用EXPECT_NOT_EUQAL(value1,value2)检查返回值是否不相等,必须使用EXPECT关键字。
+
+4)测试套件和测试用例都使用英文命名,具体描述在相应目录下的desc.txt中显示。
+
+
+5. 执行过程中会将init数据插入相应的表。插入之前会先删除表。不对其他表做任何操作。
+如果要清空其他表，需要将相同表名的空的csv文件拉到init目录。
+

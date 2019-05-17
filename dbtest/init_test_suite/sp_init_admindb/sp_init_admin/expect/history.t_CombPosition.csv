@@ -1,0 +1,1 @@
+TradingDay,BrokerID,AccountID,CurrencyID,ExchangeID,ExchangeName,InstrumentID,InstrumentName,ProductID,ProductName,PosiDirection,HedgeFlag,Position,Margin,Leg1InstrumentID,Leg2InstrumentID,Leg1Margin,Leg2Margin,Leg1PreSettlementPrice,Leg2PreSettlementPrice,Leg1SettlementPrice,Leg2SettlementPrice,AccountType,PrimaryAccountID 

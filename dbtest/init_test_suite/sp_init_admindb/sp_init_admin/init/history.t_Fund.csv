@@ -1,0 +1,5 @@
+FundID,FundName,OrgID,FundType,FundStatus,FundShare,InitNetValue,InitUnitNetValue,NetValue,UnitNetValue,PreNetValue,PreUnitNetValue,ExternalAsset,WarrantAsset,MaxUnitNetValue,MaxRetracement,MaxHistoryUnitNetValue,MaxHistoryRetracement,CumDividend,ManageFeeRate,ManageFee,BeginDate,EndDate,FundAdministrator,FundManager,UpdateDate,UpdateTime,FundDay,CurrencyID,SubFundNum,AlgID,InitAlgID,IsFOFUnderlying 
+S001,S001,frank,1,1,10000,10000,1,10000,1,10000,1,10000,0,1,0,1,0,0,0.01,0,20190513,20200513,,,,,20190513,CNY,2,1,2,0
+S00101,S001-A,frank,2,1,5000,5000,1,5000,1,5000,1,0,0,1,0,1,0,0,0,0,20190513,20200513,,,,,20190513,CNY,0,1,2,0
+S00102,S001-B,frank,2,1,5000,5000,1,5000,1,5000,1,0,0,1,0,1,0,0,0,0,20190513,20200513,,,,,20190513,CNY,0,1,2,0
+F001,Êý¾Ý¿â16,frank,0,1,1000,1000,1,1000,1,1000,1,1000,,1,0,1,0,0,0,0,20190513,20190514,,,,,20190513,CNY,0,0,2,0

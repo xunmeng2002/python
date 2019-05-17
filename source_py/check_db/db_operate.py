@@ -9,21 +9,23 @@ def connect_db(db_user, db_password, db_host, db_port, db_database):
     return conn
 
 
-def load_csv_into_db(cursor, path, admin_db_name, history_db_name, init_db_name):
+def load_csv_into_db(cursor, path, admin_db, history_db, init_db, sync_db):
     for file_name in os.listdir(path):
+        db_name = ""
         try:
             table_name = file_name.split('.')[1]
-            db_name = ""
             if file_name.startswith("admin"):
-                db_name = admin_db_name
+                db_name = admin_db
             elif file_name.startswith("history"):
-                db_name = history_db_name
+                db_name = history_db
             elif file_name.startswith("init"):
-                db_name = init_db_name
+                db_name = init_db
+            elif file_name.startswith("sync"):
+                db_name = sync_db
 
             sql = "truncate " + db_name + "." + table_name + ";"
             cursor.execute(sql)
-            file_path = path + file_name
+            file_path = os.path.join(path, file_name)
             line_count = 0
             header_line = ''
             for line in open(file_path, "r"):
@@ -48,13 +50,29 @@ def load_csv_into_db(cursor, path, admin_db_name, history_db_name, init_db_name)
                     cursor.execute(sql)
                 line_count += 1
         except Exception, e:
-            print "load %s failed" % file_name
+            print "load %s to %s failed" % (file_name, db_name)
             raise e
 
 
-def check_result(cursor, db_name, all_tables):
-    for table_name in all_tables:
-        result, msg = check_one_table_records(cursor, db_name, table_name, all_tables[table_name])
+def check_all_result(cursor, db_info):
+    result, msg = check_one_db_result(cursor, db_info.admin_db, db_info.admin_tables)
+    if result is False:
+        return False, msg
+    result, msg = check_one_db_result(cursor, db_info.history_db, db_info.history_tables)
+    if result is False:
+        return False, msg
+    result, msg = check_one_db_result(cursor, db_info.init_db, db_info.init_tables)
+    if result is False:
+        return False, msg
+    result, msg = check_one_db_result(cursor, db_info.init_db, db_info.init_tables)
+    if result is False:
+        return False, msg
+    return True, ""
+
+
+def check_one_db_result(cursor, db_name, table_dict):
+    for table_name in table_dict:
+        result, msg = check_one_table_records(cursor, db_name, table_name, table_dict[table_name])
         if not result:
             return False, msg
     return True, ""
@@ -65,7 +83,7 @@ def check_one_table_records(cursor, db_name, table_name, tables):
     cursor.execute(sql)
     res_list = cursor.fetchall()
     if len(res_list) != len(tables):
-        return False, "db' records count doesn't match with Table[%s]." % table_name
+        return False, "db's records count doesn't match with Table.[%s.%s]" % (db_name, table_name)
     if len(tables) == 0:
         return True, ""
 
@@ -90,7 +108,7 @@ def check_one_table_records_primary_key_value(cursor, db_name, table_name, table
                 is_exist = True
                 break
         if is_exist is False:
-            msg = "Table[%s] record in db not exist in tables.\n" % table_name
+            msg = "Table record in db not exist in tables.[%s.%s]\n" % (db_name, table_name)
             msg += db_primary_key_value_dict.__str__()
             return False, msg
 
@@ -101,7 +119,7 @@ def check_one_table_records_primary_key_value(cursor, db_name, table_name, table
                 is_exist = True
                 break
         if is_exist is False:
-            msg = "Table[%s] record in tables not exist in db.\n" % table_name
+            msg = "Table record in tables not exist in db.[%s.%s]\n" % (db_name, table_name)
             msg += table.get_primary_key_value_dict()
             return False, msg
 

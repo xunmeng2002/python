@@ -9,7 +9,8 @@ def connect_db(db_user, db_password, db_host, db_port, db_database):
     return conn
 
 
-def load_csv_into_db(cursor, path, admin_db, history_db, init_db, sync_db):
+def load_csv_into_db(conn, path, admin_db, history_db, init_db, sync_db):
+    cursor = conn.cursor()
     for file_name in os.listdir(path):
         db_name = ""
         try:
@@ -52,6 +53,7 @@ def load_csv_into_db(cursor, path, admin_db, history_db, init_db, sync_db):
         except Exception, e:
             print "load %s to %s failed" % (file_name, db_name)
             raise e
+    conn.commit()
 
 
 def check_all_result(cursor, db_info):

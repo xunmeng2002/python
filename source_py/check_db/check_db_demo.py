@@ -17,8 +17,9 @@ def main():
     sync_db = "test_sync"
     expect_path = "./expect/"
     conn = csv_parse.db_operate.connect_db(db_user, db_password, db_host, db_port, admin_db)
+    db_operate.load_csv_into_db(conn, expect_path, admin_db, history_db, init_db, sync_db)
+
     cursor = conn.cursor()
-    db_operate.load_csv_into_db(cursor, expect_path, admin_db, history_db, init_db, sync_db)
     db_info = db_struct.DbInfo(admin_db, history_db, init_db, sync_db)
     csv_parse.parse_csvs(cursor, expect_path, db_info)
     print "db_operate.check_result = %s, msg:\n%s" % db_operate.check_all_result(cursor, db_info)

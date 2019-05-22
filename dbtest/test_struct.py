@@ -105,7 +105,7 @@ class TestCase:
         try:
             init_dir = os.path.join(self.dir, "init")
             expect_dir = os.path.join(self.dir, "expect")
-            db_operate.load_csv_into_db(cursor, init_dir, self.admin_db, self.history_db, self.init_db, self.sync_db)
+            db_operate.load_csv_into_db(conn, init_dir, self.admin_db, self.history_db, self.init_db, self.sync_db)
             if self.only_load_data:
                 return True
             sqls = common_utils.trim_return(self.command).split(';')

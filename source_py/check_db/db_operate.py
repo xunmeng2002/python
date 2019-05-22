@@ -83,7 +83,7 @@ def check_one_table_records(cursor, db_name, table_name, tables):
     cursor.execute(sql)
     res_list = cursor.fetchall()
     if len(res_list) != len(tables):
-        return False, "db's records count doesn't match with Table.[%s.%s]" % (db_name, table_name)
+        return False, "db's records count doesn't match with csv file.[%s.%s]" % (db_name, table_name)
     if len(tables) == 0:
         return True, ""
 
@@ -108,7 +108,7 @@ def check_one_table_records_primary_key_value(cursor, db_name, table_name, table
                 is_exist = True
                 break
         if is_exist is False:
-            msg = "Table record in db not exist in tables.[%s.%s]\n" % (db_name, table_name)
+            msg = "Record in db not exist in csv file.[%s.%s]\n" % (db_name, table_name)
             msg += db_primary_key_value_dict.__str__()
             return False, msg
 
@@ -119,7 +119,7 @@ def check_one_table_records_primary_key_value(cursor, db_name, table_name, table
                 is_exist = True
                 break
         if is_exist is False:
-            msg = "Table record in tables not exist in db.[%s.%s]\n" % (db_name, table_name)
+            msg = "Record in csv file not exist in db.[%s.%s]\n" % (db_name, table_name)
             msg += table.get_primary_key_value_dict()
             return False, msg
 

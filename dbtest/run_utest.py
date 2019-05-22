@@ -41,7 +41,10 @@ def get_cases(suite_dir, admin_db, history_db, init_db, sync_db):
             continue
         if "filter" in args and re.search(args["filter"], name) is None:
                 continue
-        cases.append(test_struct.TestCase(name, case_dir, admin_db, history_db, init_db, sync_db))
+        only_load_data = False
+        if "only-load-data" in args:
+            only_load_data = True
+        cases.append(test_struct.TestCase(name, case_dir, admin_db, history_db, init_db, sync_db, only_load_data))
     return cases
 
 
@@ -168,7 +171,6 @@ def main():
     db_port = cfg.get('db', 'port')
     db_database = cfg.get('db', 'curr_db')
     conn = db_operate.connect_db(db_user, db_password, db_host, db_port, db_database)
-    cursor = conn.cursor()
     admin_db = cfg.get("db", "admin_db")
     history_db = cfg.get("db", "history_db")
     init_db = cfg.get("db", "init_db")
@@ -178,7 +180,7 @@ def main():
     root_dir = cfg.get('path', 'root_dir')
     suites = get_suites(root_dir, admin_db, history_db, init_db, sync_db)
     for suite in suites:
-        suite.exec_suite(cursor)
+        suite.exec_suite(conn)
     end_time = datetime.datetime.now()
     report(suites, start_time, end_time)
     print_summary(suites)

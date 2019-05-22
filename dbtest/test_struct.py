@@ -19,10 +19,11 @@ class TestSuite:
         self.fail_num = 0
         self.pass_num = 0
 
-    def exec_suite(self, cursor):
+    def exec_suite(self, conn):
+        print "exec suite[%s]:" % self.name
         for case in self.cases:
             start = datetime.datetime.now()
-            if case.exec_case(cursor):
+            if case.exec_case(conn):
                 self.pass_num += 1
             else:
                 self.fail_num += 1
@@ -31,13 +32,14 @@ class TestSuite:
 
 
 class TestCase:
-    def __init__(self, name, dir, admin_db, history_db, init_db, sync_db):
+    def __init__(self, name, dir, admin_db, history_db, init_db, sync_db, only_load_data):
         self.name = name
         self.dir = dir
         self.admin_db = admin_db
         self.history_db = history_db
         self.init_db = init_db
         self.sync_db = sync_db
+        self.only_load_data = only_load_data
         self.command = ""
         self.result = True
         self.msg = ''
@@ -97,11 +99,15 @@ class TestCase:
             return False
         return True
 
-    def exec_case(self, cursor):
+    def exec_case(self, conn):
+        print "\texec case[%s]." % self.name
+        cursor = conn.cursor()
         try:
             init_dir = os.path.join(self.dir, "init")
             expect_dir = os.path.join(self.dir, "expect")
             db_operate.load_csv_into_db(cursor, init_dir, self.admin_db, self.history_db, self.init_db, self.sync_db)
+            if self.only_load_data:
+                return True
             sqls = common_utils.trim_return(self.command).split(';')
             for sql in sqls:
                 sql = self.replace_db_name(sql)
@@ -113,6 +119,7 @@ class TestCase:
                 else:
                     try:
                         cursor.execute(sql)
+                        conn.commit()
                     except Exception, e:
                         print sql
                         raise e

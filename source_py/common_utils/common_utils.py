@@ -13,8 +13,4 @@ def trim_return(line):
 
 
 def transfer_decimal(num):
-    num_str = str(float(num))
-    if num_str.endswith(".0"):
-        num_str = num_str[:-2]
-    return num_str
-
+    return ("%.10f" % float(num)).rstrip('0').rstrip('.')

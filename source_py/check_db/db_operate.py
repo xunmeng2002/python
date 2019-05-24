@@ -12,6 +12,8 @@ def connect_db(db_user, db_password, db_host, db_port, db_database):
 def load_csv_into_db(conn, path, admin_db, history_db, init_db, sync_db):
     cursor = conn.cursor()
     for file_name in os.listdir(path):
+        if not file_name.endswith('.csv'):
+            continue
         db_name = ""
         try:
             table_name = file_name.split('.')[1]
@@ -170,3 +172,26 @@ def qry_table_field_value_dicts(cursor, db_name, table_name, field_name_list):
         result_dicts.append(result)
     return result_dicts
 
+
+def qry_table_names(cursor,  db_name):
+    sql = "select TABLE_NAME from information_schema.TABLES where TABLE_SCHEMA = '" + db_name + "';";
+    cursor.execute(sql)
+    tables = []
+    for item in cursor.fetchall():
+        tables.append(item[0])
+    return tables
+
+
+def qry_header_from_table(cursor, db_name, table_name):
+    sql = "select COLUMN_NAME from information_schema.COLUMNS where TABLE_SCHEMA = '" + db_name + "' and table_name =  '" + table_name + "';"
+    cursor.execute(sql)
+    header = []
+    for item in cursor.fetchall():
+        header.append(item[0])
+    return header
+
+
+def qry_all_data_from_table(cursor, db_name, table_name):
+    sql = "select * from `" + db_name + "`.`" + table_name + "`;"
+    cursor.execute(sql)
+    return cursor.fetchall()

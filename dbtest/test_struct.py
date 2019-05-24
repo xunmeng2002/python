@@ -3,12 +3,12 @@ import os
 import sys
 import traceback
 import datetime
-
 sys.path.append("..\source_py")
 from common_utils import common_utils
 from common_utils import db_struct
 from check_db import db_operate
 from check_db import csv_parse
+import excel_to_csv
 
 
 class TestSuite:
@@ -40,11 +40,15 @@ class TestCase:
         self.init_db = init_db
         self.sync_db = sync_db
         self.only_load_data = only_load_data
+        self.init_dir = os.path.join(dir, "init")
+        self.expect_dir = os.path.join(dir, "expect")
         self.command = ""
         self.result = True
         self.msg = ''
         self.elapse = 0
         self.read_command()
+        excel_to_csv.xlsx_to_csv_with_dir(self.init_dir)
+        excel_to_csv.xlsx_to_csv_with_dir(self.expect_dir)
 
     def read_command(self):
         command_path = os.path.join(self.dir, "command.txt")
@@ -103,9 +107,7 @@ class TestCase:
         print "\texec case[%s]." % self.name
         cursor = conn.cursor()
         try:
-            init_dir = os.path.join(self.dir, "init")
-            expect_dir = os.path.join(self.dir, "expect")
-            db_operate.load_csv_into_db(conn, init_dir, self.admin_db, self.history_db, self.init_db, self.sync_db)
+            db_operate.load_csv_into_db(conn, self.init_dir, self.admin_db, self.history_db, self.init_db, self.sync_db)
             if self.only_load_data:
                 return True
             sqls = common_utils.trim_return(self.command).split(';')
@@ -124,7 +126,7 @@ class TestCase:
                         print sql
                         raise e
             db_info = db_struct.DbInfo(self.admin_db, self.history_db, self.init_db, self.sync_db)
-            csv_parse.parse_csvs(cursor, expect_dir, db_info)
+            csv_parse.parse_csvs(cursor, self.expect_dir, db_info)
             self.result, self.msg = db_operate.check_all_result(cursor, db_info)
             return self.result
         except Exception, e:

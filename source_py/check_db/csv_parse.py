@@ -28,7 +28,7 @@ def cmp_pk_with_value_dict(table, value_dict):
 def cmp_total_with_value_dict(table, field_dict):
     for field_name in table.field_name_list:
         if table.__getattribute__(field_name) != field_dict[field_name]:
-            msg = "Table[%s] field name[%s] does not match. table value[%s], db value[%s]." % (table.table_name, field_name, table.__getattribute__(field_name), field_dict[field_name])
+            msg = "%s.%s does not match at field[%s]. table value[%s], db value[%s]." % (table.db_name, table.table_name, field_name, table.__getattribute__(field_name), field_dict[field_name])
             msg += "\ntable:" + table.get_field_dict().__str__()
             msg += "\ndb:" + field_dict.__str__()
             return False, msg
@@ -49,7 +49,7 @@ def get_field_dict(table):
     return table.field_dict
 
 
-def parse_one_csv_file(file_path, table_name, tables, primary_key_name_list):
+def parse_one_csv_file(file_path, db_name, table_name, tables, primary_key_name_list):
     tables[table_name] = []
     row = 0
     Table = type(table_name, (object,), {})
@@ -58,6 +58,7 @@ def parse_one_csv_file(file_path, table_name, tables, primary_key_name_list):
         line = common_utils.trim_return(line)
         fields = line.split(",")
         if row == 0:
+            Table.db_name = db_name
             Table.table_name = table_name
             Table.header_line = line
             Table.primary_key_name_list = primary_key_name_list
@@ -104,5 +105,5 @@ def parse_csvs(cursor, path, db_info):
         file_path = os.path.join(path, file_name)
         table_name = file_name.split(".")[1]
         primary_key_list = db_operate.qry_table_primary_key_list(cursor, db_name, table_name)
-        parse_one_csv_file(file_path, table_name, curr_tables, primary_key_list)
+        parse_one_csv_file(file_path, db_name, table_name, curr_tables, primary_key_list)
 

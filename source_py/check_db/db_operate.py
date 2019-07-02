@@ -2,6 +2,7 @@
 import os
 import mysql.connector
 from common_utils import common_utils
+import csv_reader
 
 
 def connect_db(db_user, db_password, db_host, db_port, db_database):
@@ -25,37 +26,22 @@ def load_csv_into_db(conn, path, admin_db, history_db, init_db, sync_db):
                 db_name = init_db
             elif file_name.startswith("sync"):
                 db_name = sync_db
-
-            sql = "truncate " + db_name + "." + table_name + ";"
-            cursor.execute(sql)
+            else:
+                print "unsupported csv file name[%s]" % file_name
+                continue
             file_path = os.path.join(path, file_name)
-            line_count = 0
-            header_line = ''
-            for line in open(file_path, "r"):
-                line = common_utils.try_gbk2utf8(line)
-                line = common_utils.trim_return(line)
-                if line_count == 0:
-                    header_line = line
-                else:
-                    values = line.split(",")
-                    sql = "insert into " + db_name + "." + table_name + "(" + header_line + ") values("
-                    i = 0
-                    for value in values:
-                        if i > 0:
-                            sql += ', '
-                        if value != '':
-                            sql += '"' + value + '"'
-                        else:
-                            sql += 'NULL'
-                        i += 1
-                    sql += ");"
-                    # print sql
-                    cursor.execute(sql)
-                line_count += 1
+
+            clear_sql = "truncate " + db_name + "." + table_name + ";"
+            print clear_sql
+            cursor.execute(clear_sql)
+
+            insert_sql = csv_reader.get_insert_sql_str(db_name, table_name, file_path)
+            if insert_sql != "":
+                cursor.execute(insert_sql)
+            conn.commit()
         except Exception, e:
             print "load %s to %s failed" % (file_name, db_name)
             raise e
-    conn.commit()
 
 
 def check_all_result(cursor, db_info):

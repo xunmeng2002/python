@@ -1,4 +1,3 @@
-import csv_parse.csv_parse
-import csv_parse.db_operate
-import common_utils.common_utils
-
+import check_db
+import common_utils
+import log_init
